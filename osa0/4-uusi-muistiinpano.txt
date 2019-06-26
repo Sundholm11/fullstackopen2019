@@ -1,0 +1,24 @@
+title 0.4 Käyttäjä luo uuden muistiinpanon
+
+note over selain
+Käyttäjä kirjoittaa tekstikenttään
+jotain ja painaa nappia 'tallenna'
+end note
+
+selain->palvelin: HTTP POST https://fullstack-exampleapp.herokuapp.com/new_note
+
+note over palvelin
+Palvelin vastaanottaan ja vastaa
+pyyntöön statuskoodilla 302,
+eli kehottaa selainta tekemään uuden
+HTTP GET pyynnön Locations kertomaan
+paikkaan (notes)
+end note
+
+palvelin-->selain: Status Code 302, redirectaus
+
+note over selain
+Selain suorittaa muistiinpanojen sivun latauksen uudelleen
+end note
+
+selain->palvelin: HTTP GET https://fullstack-exampleapp.herokuapp.com/notes

@@ -1,0 +1,4 @@
+title 0.6 Uusi muistiinpano spa
+
+Selain->Palvelin: HTTP POST https://fullstack-exampleapp.herokuapp.com/new_note_spa
+Palvelin-->Selain: Status Code 201 Created, {"message":"note created"}
