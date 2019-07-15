@@ -36,8 +36,7 @@ const App = () => {
         event.preventDefault()
         const newPerson = {
             name: newName,
-            number: newNumber,
-            id: persons.length + 1
+            number: newNumber
         }
         const personNames = persons.map(person => person.name)
         const personNumbers = persons.map(person => person.number)
@@ -61,13 +60,19 @@ const App = () => {
     const addPersons = (newPerson) => {
         personService
                 .create(newPerson)
-                .then(returnedPerson =>
+                .then(returnedPerson => {
                     setPersons(persons.concat(returnedPerson))
-                )
-        setMessage({name: `Added ${newPerson.name}`, type: 1})
-        setTimeout(() => {
-            setMessage(null)
-        }, 5000)
+                    setMessage({name: `Added ${newPerson.name}`, type: 1})
+                    setTimeout(() => {
+                        setMessage(null)
+                    }, 5000)
+                })
+                .catch(error => {
+                    setMessage({name: error.response.data.error, type: 0})
+                    setTimeout(() => {
+                        setMessage(null)
+                    }, 5000)
+                })
     }
 
     const updatePersons = (newPerson) => {
@@ -75,7 +80,7 @@ const App = () => {
         personService
             .update(updateId.id, newPerson)
             .then(returnedPerson => {
-                setPersons(persons.map(person => person.id !== newPerson.id ? person : returnedPerson))
+                setPersons(persons.map(person => person.id !== updateId.id ? person : returnedPerson))
                 setMessage({name: `Updated ${newPerson.name}`, type: 1})
                 setTimeout(() => {
                     setMessage(null)
