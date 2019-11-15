@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
+import  { useField } from '../hooks'
 
 const Blogform = ( { handleCreate } ) => {
-	const [title, setTitle] = useState('')
-	const [author, setAuthor] = useState('')
-	const [url, setUrl] = useState('')
+	const title = useField('text')
+	const author = useField('text')
+	const url = useField('text')
 
 	Blogform.propTypes = {
 		handleCreate: PropTypes.func.isRequired
@@ -13,9 +14,9 @@ const Blogform = ( { handleCreate } ) => {
 	const handle = event => {
 		event.preventDefault()
 		handleCreate({ title, author, url })
-		setTitle('')
-		setAuthor('')
-		setUrl('')
+		title.reset()
+		author.reset()
+		url.reset()
 	}
 
 	return (
@@ -23,30 +24,15 @@ const Blogform = ( { handleCreate } ) => {
 			<form onSubmit={handle}>
 				<div>
                     Title
-					<input
-						type="text"
-						value={title}
-						name="Title"
-						onChange={ ({ target }) => setTitle(target.value) }
-					/>
+					<input {...title.inputProps()} />
 				</div>
 				<div>
                     Author
-					<input
-						type="text"
-						value={author}
-						name="Author"
-						onChange={ ({ target }) => setAuthor(target.value) }
-					/>
+					<input {...author.inputProps()} />
 				</div>
 				<div>
                     URL
-					<input
-						type="text"
-						value={url}
-						name="URL"
-						onChange={ ({ target }) => setUrl(target.value) }
-					/>
+					<input {...url.inputProps()} />
 				</div>
 				<button type="submit">Create</button>
 			</form>

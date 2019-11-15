@@ -5,13 +5,15 @@ import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import Togglable from './components/Togglable'
+import  { useField } from './hooks'
 
 const App = () => {
 	const [blogs, setBlogs] = useState([])
 	const [message, setMessage] = useState(null)
-	const [username, setUsername] = useState('')
-	const [password, setPassword] = useState('')
 	const [user, setUser] = useState(null)
+
+	const username = useField('text')
+	const password = useField('password')
 
 	const sortBlogs = blogs => {
 		blogs.sort((blogA, blogB) => blogB.likes - blogA.likes)
@@ -36,8 +38,10 @@ const App = () => {
 	const handleLogin = async (event) => {
 		event.preventDefault()
 		try {
+			const usernameValue = username.value
+			const passwordValue = password.value
 			const user = await loginService.login({
-				username, password
+				usernameValue, passwordValue
 			})
 
 			window.localStorage.setItem(
@@ -45,8 +49,8 @@ const App = () => {
 			)
 			blogService.setToken(user.token)
 			setUser(user)
-			setUsername('')
-			setPassword('')
+			username.reset()
+			password.reset()
 			setMessage({ name: `Logged in as ${user.name}`, type: 1 })
 			setTimeout(() => {
 				setMessage(null)
@@ -85,21 +89,11 @@ const App = () => {
 			<form onSubmit={handleLogin}>
 				<div>
                     Username
-					<input
-						type="text"
-						value={username}
-						name="Username"
-						onChange={ ({ target }) => setUsername(target.value) }
-					/>
+					<input {...username.inputProps()} />
 				</div>
 				<div>
                     Password
-					<input
-						type="password"
-						value={password}
-						name="Password"
-						onChange={ ({ target }) => setPassword(target.value) }
-					/>
+					<input {...password.inputProps()} />
 				</div>
 				<button type="submit">Submit</button>
 			</form>
