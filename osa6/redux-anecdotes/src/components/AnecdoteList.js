@@ -15,11 +15,9 @@ const AnecdoteList = (props) => {
                 <div>
                     has {anecdote.votes}
                     <button onClick={() => {
-                        props.vote(anecdote.id)
-                        props.notificationChange(`You voted ${anecdote.content}`)
-                        setTimeout(() => {
-                            props.notificationChange('')
-                        }, 5000)}}>Vote</button>
+                        props.vote(anecdote)
+                        props.notificationChange(`You voted ${anecdote.content}`, 5)
+                    }}>Vote</button>
                 </div>
                 </div>
             )}
