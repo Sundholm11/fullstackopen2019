@@ -1,31 +1,19 @@
 import React, { useState } from 'react'
 import {
   BrowserRouter as Router,
-  Route, Link, Redirect, withRouter
+  Route, Link, withRouter
 } from 'react-router-dom'
 
-const Menu = ({anecdotes}) => {
+const Menu = () => {
   const padding = {
     paddingRight: 5
   }
 
-  const anecdoteById = (id, anecdotes) => (
-    anecdotes.find(anecdote => anecdote.id === id)
-  )
-
   return (
     <div>
-      <div>
-        <Link style={padding} to="/">Anecdotelist</Link>
-        <Link style={padding} to="/create">Create new</Link>
-        <Link style={padding} to="/about">About</Link>
-      </div>
-      <Route exact path="/" render={() => <AnecdoteList anecdotes={anecdotes} />} />
-      <Route exact path="/create" render={() => <CreateNew />} />
-      <Route exact path="/about" render={() => <About />} />
-      <Route exact path="/anecdotes/:id" render={({ match }) =>
-        <Anecdote anecdote={anecdoteById(match.params.id, anecdotes)}/>}
-      />
+      <Link style={padding} to="/">Anecdotelist</Link>
+      <Link style={padding} to="/create">Create new</Link>
+      <Link style={padding} to="/about">About</Link>
     </div>
   )
 }
@@ -81,6 +69,7 @@ const CreateNew = (props) => {
       info,
       votes: 0
     })
+    props.history.push('/')
   }
 
   return (
@@ -106,6 +95,8 @@ const CreateNew = (props) => {
 
 }
 
+const NewAnecdote = withRouter(CreateNew)
+
 const App = () => {
   const [anecdotes, setAnecdotes] = useState([
     {
@@ -129,6 +120,8 @@ const App = () => {
   const addNew = (anecdote) => {
     anecdote.id = (Math.random() * 10000).toFixed(0)
     setAnecdotes(anecdotes.concat(anecdote))
+    setNotification(`A new anecdote ${anecdote.content} created!`)
+    setTimeout(() => setNotification(''), 10000)
   }
 
   const anecdoteById = (id) =>
@@ -148,12 +141,21 @@ const App = () => {
   return (
     <div>
       <h1>Software anecdotes</h1>
+      <p>{notification}</p>
       <Router>
-        <Menu anecdotes={anecdotes} />
+        <div>
+          <Menu anecdotes={anecdotes} addNew={addNew} />
+        </div>
+        <Route exact path="/" render={() => <AnecdoteList anecdotes={anecdotes} />} />
+        <Route exact path="/create" render={() => <NewAnecdote addNew={addNew}/>} />
+        <Route exact path="/about" render={() => <About />} />
+        <Route exact path="/anecdotes/:id" render={({ match }) =>
+          <Anecdote anecdote={anecdoteById(match.params.id, anecdotes)}/>}
+        />
       </Router>
       <Footer />
     </div>
   )
 }
 
-export default App;
+export default App
