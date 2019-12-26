@@ -1,0 +1,11 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlJlZ3VsYXJVc2VyIiwiaWQiOiI1ZDM5YTJhOTEyNzJiMjJlZjQzNDIyMmUiLCJpYXQiOjE1NjQwNTgzMzR9.O425-anLrlDu-DFaMln1dEHqxTWasYTvyiS5gscdxa8
+
+{
+	"title": "Test title",
+	"author": "Jimmy Test",
+	"url": "whoops amazing url point 3",
+	"likes": 80,
+	"userId": "5d39a2a91272b22ef434222e"
+}
